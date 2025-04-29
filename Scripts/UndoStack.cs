@@ -1,9 +1,15 @@
+using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
+[Serializable]
 public class UndoStack<T>
 {
+    [JsonProperty]
     private readonly List<T> _history = new List<T>();
+    
+    [JsonProperty]
     private int _currentIndex = -1;
 
     public UndoStack(T initialValue)
