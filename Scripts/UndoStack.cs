@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
 [Serializable]
 public class UndoStack<T>
 {
-    [JsonProperty]
-    private readonly List<T> _history = new List<T>();
-    
-    [JsonProperty]
-    private int _currentIndex = -1;
+    [JsonProperty] private readonly List<T> _history = new List<T>();
+
+    [JsonProperty] private int _currentIndex = -1;
 
     public UndoStack(T initialValue)
     {
@@ -36,7 +35,7 @@ public class UndoStack<T>
             return _history[_currentIndex];
         }
 
-        throw new System.InvalidOperationException("No current state available.");
+        throw new InvalidOperationException("No current state available.");
     }
 
     public bool Undo()
@@ -59,5 +58,10 @@ public class UndoStack<T>
         }
 
         return false;
+    }
+
+    public IEnumerable<(T item, bool isCurrent)> GetFullHistory()
+    {
+        return _history.Select((item, index) => (item, index == _currentIndex));
     }
 }
