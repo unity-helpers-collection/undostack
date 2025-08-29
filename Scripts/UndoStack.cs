@@ -28,8 +28,13 @@ public class UndoStack<T>
         _currentIndex++;
     }
 
-    public T Current()
+    public T Current(int indexOverwrite = -1)
     {
+        if (indexOverwrite >= 0 && indexOverwrite < _history.Count)
+        {
+            return _history[indexOverwrite];
+        }
+        //else
         if (_currentIndex >= 0 && _currentIndex < _history.Count)
         {
             return _history[_currentIndex];
