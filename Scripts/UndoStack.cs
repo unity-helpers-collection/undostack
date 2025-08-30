@@ -28,19 +28,22 @@ public class UndoStack<T>
         _currentIndex++;
     }
 
-    public T Current(int indexOverwrite = -1)
+    public T Current()
     {
-        if (indexOverwrite >= 0 && indexOverwrite < _history.Count)
-        {
-            return _history[indexOverwrite];
-        }
-        //else
         if (_currentIndex >= 0 && _currentIndex < _history.Count)
         {
             return _history[_currentIndex];
         }
 
         throw new InvalidOperationException("No current state available.");
+    }
+
+    public T GetAtIndex(int index)
+    {
+        if (index < 0 || index >= _history.Count)
+            throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range of the history.");
+        
+        return _history[index];
     }
 
     public bool Undo()
@@ -68,5 +71,13 @@ public class UndoStack<T>
     public IEnumerable<(T item, bool isCurrent)> GetFullHistory()
     {
         return _history.Select((item, index) => (item, index == _currentIndex));
+    }
+
+    public void SetIndex(int index)
+    {
+        if (index < 0 || index >= _history.Count)
+            throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range of the history.");
+        
+        _currentIndex = index;
     }
 }
